@@ -1,2 +1,2 @@
 # quran-exam
-website for qura exam
+website for quran exam
