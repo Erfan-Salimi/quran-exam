@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+        <title>کارآزمون قرآن پایه هشتم</title>
+        <style>
+            .inputs {
+                border-bottom: 1px solid #43424a !important;
+                margin-bottom: 20px;
+                font-family: Vazir;
+                font-size: 20px;
+                color: #fff;
+                line-height: 1.2;
+                display: block;
+                width: 100%;
+                height: 45px;
+                background: transparent;
+                padding: 0 5px 0 38px;
+                border: none;
+                outline: none !important;
+                transition: border-bottom;
+            }
+            .inputs ::focus {
+                border-bottom: red;
+            }
+            body {
+                direction: rtl;
+                background-color: black;
+            }
+            @import url('https://v1.fontapi.ir/css/Lalezar');
+            @import url('https://v1.fontapi.ir/css/Vazir');
+            .lalezar {
+                font-family: Lalezar;
+            }
+            .vazir {
+                font-family: Vazir;
+            }
+            a {
+                text-decoration: none;
+            }
+            footer {
+                position: fixed;
+                width: 100%;
+                bottom: 0;
+            }
+            .cyan {
+                color: #00b2df;
+            }
+            .btn-outline-danger:hover {
+                color: black !important;
+                background-color: red;
+            }
+            hr {
+                border: 0;
+                height: 2px;
+                background-image: linear-gradient(to right, transparent, red, transparent);
+            }
+            img {
+                box-shadow: 0 4px 8px 0 rgba(255, 0, 0, 0.2), 0 6px 20px 0 rgba(255, 0, 0, 0.1);
+            }
+            input:-webkit-autofill,
+            input:-webkit-autofill:hover,
+            input:-webkit-autofill:focus,
+            input:-webkit-autofill:active {
+                /* transition: background-color 5000s ease-in-out 0s; */
+                -webkit-text-fill-color: #fff !important;
+                -webkit-box-shadow: 0 0 0 30px rgb(0, 0, 0) inset;
+            }
+            .font22 {
+                font-size: 22px;
+            }
+            .text-danger {
+                color:rgb(255, 0, 0) !important;
+            }
+            #body {
+                filter: brightness(0);
+                transition: filter 2s;
+            }
+        </style>
+    </head>
+    <body style="padding-bottom: 100px;" class="pt-4" id="body">
+        {% if user.is_authenticated %}
+        <p class="lalezar text-danger text-center font22">{{ user.username }} -> <span id="score">{{ user.score }}</span></p>
+        {% endif %}
+        <h1 class="text-white text-center lalezar"><i class="fa-solid fa-gun" style="color: red; transform: rotate(180deg)"></i> کار آزمون قرآن پایه هشتم  <i style="color: red" class="fa-solid fa-gun"></i></h1>
+        <hr><br>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-12 mb-4">
+                    <h2 style="font-size: 60px;" class="lalezar text-danger text-center">{{ question.title }}</h2>
+                    <img src="{{ question.img.url }}" width="100%">
+                </div>
+                {% if question.is_question %}
+                <div class="col-lg-12 col-12 align-self-center">
+                    <h2 class="text-white text-center lalezar" style="color: red!important">جواب بده!</h2>
+                    <input name="answer" id="answer" class="inputs lalezar" placeholder="کلید رو وارد کن! حواست باشه امتیاز منفی نگیری">
+                    <p id="problem" class="lalezar text-danger text-center font18"></p>
+                    <p id="success" class="lalezar text-success text-center font18"></p>
+                    <div class="text-center">
+                        <button type="button" onclick="send(this)" style="font-size: 20px" class="btn btn-outline-danger lalezar">ثبت!</button>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-lg-12 col-12 align-self-center">
+                    <h2 class="text-white text-center lalezar" style="color: red!important">خوندی؟ بریم مرحله بعد!</h2>
+                    <div class="text-center">
+                        <button type="button" onclick="next(this)" style="font-size: 20px" class="btn btn-outline-danger lalezar">آره بریم</button>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <footer class="text-center vazir" style='margin-top: 50px; background-color: #101417; padding-top: 10px; padding-bottom: 10px; z-index: 0;'>
+            <div>
+                <span dir="rtl" class='text-white vazir'><i style="color: red" class="fa fa-code"></i> با <span style='color: red'> ❤ </span><span class='white'>توسط <span><a href="https://www.mrpy.ir/" style='color: red'>مسترپای</a></span></span></span>
+            </div>
+        </footer>
+        <script>
+            $(window).on('load', function(){
+                document.querySelector("#body").style.filter = 'brightness(1)';
+            });
+            function send(){
+                answer = document.querySelector("#answer").value;
+                console.log(answer);
+        
+                $.ajax('/exam/?format=json', {
+                    type: 'POST',  
+                    data: {answer: answer},
+                    success: function (data, status, xhr) {
+                        if (data.ok == true){
+                            if (data.true_answer){
+                                document.querySelector("#problem").innerHTML = "";
+                                document.querySelector("#success").innerHTML = data.description;
+                                setTimeout(function(){
+                                    document.querySelector("#body").style.filter = 'brightness(0)';
+                                }, 1000);
+                                setTimeout(function(){
+                                    window.location.href = "/exam/"
+                                }, 3000);
+                            } else {
+                                document.querySelector("#problem").innerHTML = data.description;
+                            }
+                        } else {
+                            document.querySelector("#problem").innerHTML = data.description;
+                        }
+                        document.querySelector("#score").innerHTML = data.score;
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) {
+                        console.log(errorMessage);
+                    }
+                });
+            }
+            function next(){
+                console.log("ok");
+                $.ajax('/exam/?format=json', {
+                    type: 'POST',  
+                    data: {answer: "next"},
+                    success: function (data, status, xhr) {
+                        if (data.ok == true){
+                            window.location.href = "/exam/"
+                        }
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) {
+                        console.log(errorMessage);
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>
